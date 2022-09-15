@@ -14,9 +14,11 @@ func Index(c echo.Context) error {
 func SaveUser(c echo.Context) error {
 	usr := new(models.User)
 	res := new(lib.Response)
-	c.Bind(usr)
+	if e := c.Bind(usr); e != nil {
+		return e
+	}
 
-	if models.CreateUser(usr) != nil {
+	if models.CreateUser(&usr) != nil {
 		res.Message = "Create user Failed"
 		return c.JSON(http.StatusBadRequest, "bad request")
 	} else {
@@ -27,15 +29,15 @@ func SaveUser(c echo.Context) error {
 }
 
 func GetUsers(c echo.Context) error {
+	usr := new(models.User)
 	res := new(lib.Response)
 
-	user, err := models.GetAll()
-	if err != nil {
+	if models.GetAll(&usr) != nil {
 		res.Message = "Failed"
 		return c.JSON(http.StatusBadRequest, "bad request")
 	} else {
 		res.Message = "Success"
-		res.Data = user
+		res.Data = usr
 		return c.JSON(http.StatusOK, res)
 	}
 }

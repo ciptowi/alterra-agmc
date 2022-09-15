@@ -12,20 +12,20 @@ type User struct {
 
 var DB *gorm.DB
 
-func CreateUser(usr *User) error {
-	if e := DB.Create(usr).Error; e != nil {
-		return e
+func CreateUser(usr interface{}) error {
+	if err := DB.Create(&usr).Error; err != nil {
+		return err
 	}
 	return nil
 }
 
 //func GetAll(keywords string) ([]User, error) {
-func GetAll() ([]User, error) {
-	var users []User
+func GetAll(usr interface{}) error {
 	//result := DB.Where("email LIKE ? OR nama LIKE ?", "%"+keywords+"%", "%"+keywords+"%").Find(&users)
-	result := DB.Find(&users)
-
-	return users, result.Error
+	if err := DB.Find(&usr).Error; err != nil {
+		return err
+	}
+	return nil
 }
 
 func GetOneById(id int) (User, error) {
@@ -34,16 +34,14 @@ func GetOneById(id int) (User, error) {
 	return user, result.Error
 }
 
-func (user *User) UpdateUser(email string) error {
-	if err := DB.Model(&User{}).Where("email = ?", email).Updates(user).Error; err != nil {
-		return err
-	}
-	return nil
+func UpdateUserById(id int) (User, error) {
+	var user User
+	result := DB.Where("id = ?", id).Updates(&user)
+	return user, result.Error
 }
 
-func (user *User) DeleteUser() error {
-	if err := DB.Delete(user).Error; err != nil {
-		return err
-	}
-	return nil
+func DeleteUserById(id int) (User, error) {
+	var user User
+	result := DB.Where("id = ?", id).Delete(&user)
+	return user, result.Error
 }
