@@ -1,44 +1,52 @@
 package config
 
 import (
-	"dynamic/models"
+	"auth/models"
 	"fmt"
-	"github.com/SbstnErhrdt/env"
-	"github.com/labstack/gommon/log"
+	"os"
+
+	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"os"
 )
 
-func InitDB() (client *gorm.DB, err error) {
-	env.LoadEnvFiles(".env.local")
+// const (
+// 	Host = "localhost"
+// 	User = "postgres"
+// 	Pass = "postgres"
+// 	Port = "5432"
+// 	DB   = "postgres"
+// )
 
-	host := os.Getenv("MYSQL_HOST")
-	user := os.Getenv("MYSQL_USER")
-	pass := os.Getenv("MYSQL_PASSWORD")
-	port := os.Getenv("MYSQL_PORT")
-	db := os.Getenv("MYSQL_DATABASE")
-
-	dsn := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s", host, port, user, db, pass)
-	ssl := os.Getenv("SQL_SSL")
-	if len(ssl) > 0 {
-		// extend dsn
-		dsn = fmt.Sprintf("%s sslmode=%s", dsn, ssl)
-	}
-	// Connect to db
-	client, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+func Setup() (*gorm.DB, error) {
+	err := godotenv.Load()
 	if err != nil {
-		//log.Error("Postgres Client: error:", err)
-		panic(err)
+		panic(err.Error())
+	}
+
+	User := os.Getenv("SQL_USER")
+	Pass := os.Getenv("SQL_PASSWORD")
+	Host := os.Getenv("SQL_HOST")
+	Port := os.Getenv("SQL_PORT")
+	DB := os.Getenv("SQL_DATABASE")
+
+	connectionString := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable",
+		Host,
+		Port,
+		User,
+		DB,
+		Pass,
+	)
+
+	db, err := gorm.Open(postgres.Open(connectionString), &gorm.Config{})
+	if err != nil {
 		return nil, err
 	}
-	log.Info("Postgres Client: connected")
-
-	InitMigrate(client)
-	return
+	InitMigrate(db)
+	return db, nil
 }
 
-func InitMigrate(DB *gorm.DB) {
-	DB.AutoMigrate(&models.User{})
+func InitMigrate(db *gorm.DB) {
+	db.AutoMigrate(&models.User{})
 	return
 }

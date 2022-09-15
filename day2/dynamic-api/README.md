@@ -1,7 +1,16 @@
 # REST API example application
 
 This is a example of an application that provides REST
-API to existing Books model.
+API to existing Users model.
+
+## Environtment
+First, create file `.env` on root directory, then insert in it these variables
+
+    SQL_HOST=localhost
+    SQL_USER=username
+    SQL_PASSWORD=password
+    SQL_PORT=5432
+    SQL_DATABASE=postgres
 
 ## Get all users
 ### Request
