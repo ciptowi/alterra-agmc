@@ -20,28 +20,35 @@ func CreateUser(usr interface{}) error {
 }
 
 //func GetAll(keywords string) ([]User, error) {
-func GetAll(usr interface{}) error {
+func GetAll() (User, error) {
+	var user User
 	//result := DB.Where("email LIKE ? OR nama LIKE ?", "%"+keywords+"%", "%"+keywords+"%").Find(&users)
-	if err := DB.Find(&usr).Error; err != nil {
+	if err := DB.Find(&user).Error; err != nil {
+		return User{}, err
+	}
+	return user, nil
+}
+
+func GetOneById(id int) (User, error) {
+	var user User
+	if err := DB.Where("id = ?", id).First(&user).Error; err != nil {
+		return User{}, err
+	}
+	return user, nil
+}
+
+func UpdateUserById(id int) error {
+	var user User
+	if err := DB.Where("id = ?", id).Updates(&user).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func GetOneById(id int) (User, error) {
+func DeleteUserById(id int) error {
 	var user User
-	result := DB.Where("id = ?", id).First(&user)
-	return user, result.Error
-}
-
-func UpdateUserById(id int) (User, error) {
-	var user User
-	result := DB.Where("id = ?", id).Updates(&user)
-	return user, result.Error
-}
-
-func DeleteUserById(id int) (User, error) {
-	var user User
-	result := DB.Where("id = ?", id).Delete(&user)
-	return user, result.Error
+	if err := DB.Where("id = ?", id).Delete(&user).Error; err != nil {
+		return err
+	}
+	return nil
 }
