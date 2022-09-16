@@ -10,14 +10,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// const (
-// 	Host = "localhost"
-// 	User = "postgres"
-// 	Pass = "postgres"
-// 	Port = "5432"
-// 	DB   = "postgres"
-// )
-
 func Setup() (*gorm.DB, error) {
 	err := godotenv.Load()
 	if err != nil {
@@ -47,6 +39,6 @@ func Setup() (*gorm.DB, error) {
 }
 
 func InitMigrate(db *gorm.DB) {
-	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.User{}, &models.Book{})
 	return
 }
