@@ -28,6 +28,20 @@ func FindUserById(id int, user *models.User) error {
 	return nil
 }
 
+func FindUserByEmail(email string, user *models.User) error {
+	if err := db.Where("email = ?", email).First(&user).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func FindUserByName(name string, user *models.User) error {
+	if err := db.Where("name = ?", name).First(&user).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 func UpdateUserById(id int, user *models.User) error {
 	if err := db.Where("id = ?", id).Updates(user).Error; err != nil {
 		return err

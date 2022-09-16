@@ -10,6 +10,7 @@ import (
 )
 
 func SaveBook(c echo.Context) error {
+	// authHeader := c.Request().Header.Get("Authorization")
 	b := new(models.Book)
 	res := new(lib.Response)
 	if err := c.Bind(&b); err != nil {
@@ -44,6 +45,7 @@ func GetBookById(c echo.Context) error {
 }
 
 func UpdateBookById(c echo.Context) error {
+	// authHeader := c.Request().Header.Get("Authorization")
 	id, _ := strconv.Atoi(c.Param("id"))
 	b := new(models.Book)
 	res := new(lib.Response)
@@ -57,6 +59,7 @@ func UpdateBookById(c echo.Context) error {
 }
 
 func DeleteBookById(c echo.Context) error {
+	// authHeader := c.Request().Header.Get("Authorization")
 	id, _ := strconv.Atoi(c.Param("id"))
 	b := new(models.Book)
 	res := new(lib.Response)
