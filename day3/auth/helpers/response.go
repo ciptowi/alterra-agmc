@@ -1,7 +1,7 @@
-package lib
+package helpers
 
 type Response struct {
 	Success bool        `json:"success"`
-	Message string      `json:"message" form:"message"`
+	Message string      `json:"message"`
 	Data    interface{} `json:"data"`
 }
