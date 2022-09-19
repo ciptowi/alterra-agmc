@@ -10,8 +10,20 @@ import (
 	"gorm.io/gorm"
 )
 
+/*
+Karena .env tidak bisa dalam mode test, sementara database hardcode disini
+Apabila sudah bisa lebih baik pakai env variable, lebih aman
+*/
+// const (
+// 	Host = "localhost"
+// 	User = "postgres"
+// 	Pass = "postgres"
+// 	Port = "5432"
+// 	DB   = "testing"
+// )
+
 func Setup() (*gorm.DB, error) {
-	fmt.Println("RUN db connection") // log test
+	// fmt.Println("RUN db connection") // log test
 	err := godotenv.Load()
 	if err != nil {
 		panic(err.Error())
@@ -39,43 +51,8 @@ func Setup() (*gorm.DB, error) {
 	return db, nil
 }
 
-func TestSetup() (*gorm.DB, error) {
-	fmt.Println("RUN db connection for testing") // log test
-	err := godotenv.Load()
-	if err != nil {
-		panic(err.Error())
-	}
-
-	User := os.Getenv("TEST_SQL_USER")
-	Pass := os.Getenv("TEST_SQL_PASSWORD")
-	Host := os.Getenv("TEST_SQL_HOST")
-	Port := os.Getenv("TEST_SQL_PORT")
-	DB := os.Getenv("TEST_SQL_DATABASE")
-
-	connectionString := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable",
-		Host,
-		Port,
-		User,
-		DB,
-		Pass,
-	)
-
-	db_test, err := gorm.Open(postgres.Open(connectionString), &gorm.Config{})
-	if err != nil {
-		return nil, err
-	}
-	TestInitMigrate(db_test)
-	return db_test, nil
-}
-
 func InitMigrate(db *gorm.DB) {
-	fmt.Println("RUN db migration for testing") // log test
-	db.AutoMigrate(&models.TestUser{}, &models.TestBook{})
-	return
-}
-
-func TestInitMigrate(db_test *gorm.DB) {
-	fmt.Println("RUN db migration") // log test
-	db_test.AutoMigrate(&models.User{}, &models.Book{})
+	// fmt.Println("RUN db migration for testing") // log test
+	db.AutoMigrate(&models.User{}, &models.Book{})
 	return
 }
