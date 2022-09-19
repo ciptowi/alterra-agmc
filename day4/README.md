@@ -1,4 +1,10 @@
-# Day 3
+# Day 4
 
-* Middleware (Logging, Authorization, Authentication JWT)
-<div><img src="../tasks/task-day3.jpg" widht="500" height="500"/></div>
+* Unit & Integration Testing
+<div><img src="../tasks/task-day4.jpg" widht="500" height="500"/></div>
+
+* Test User controllers
+<div><img src="../tasks/test-user.jpg" widht="500" height="500"/></div>
+
+* Test Book controllers
+<div><img src="../tasks/test-book.jpg" widht="500" height="500"/></div>
