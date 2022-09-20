@@ -2,6 +2,8 @@ go 1.18
 
 use (
 	./day2/dynamic-api
-	./day3/static-api
+	./day2/static-api
+	./day3/auth
 	./day4/integration-test
+	./day6/library-sevice
 )
