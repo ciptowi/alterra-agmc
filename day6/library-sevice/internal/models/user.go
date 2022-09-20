@@ -13,5 +13,3 @@ type User struct {
 	UpdatedAt time.Time  `gorm:"autoUpdateTime"`
 	DeletedAt *time.Time `gorm:"autoDeleteTime"`
 }
-
-type Users []User
