@@ -2,14 +2,17 @@ package database
 
 import (
 	"fmt"
-	"os"
-
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"os"
 )
 
-func CreateConnection() (*gorm.DB, error) {
+var (
+	dbConn *gorm.DB
+)
+
+func CreateConnection() {
 	err := godotenv.Load()
 	if err != nil {
 		panic(err.Error())
@@ -29,9 +32,16 @@ func CreateConnection() (*gorm.DB, error) {
 		Pass,
 	)
 
-	dbConn, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	psql, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		return nil, err
+		panic(err.Error())
 	}
-	return dbConn, nil
+	dbConn = psql
+}
+
+func GetConnection() *gorm.DB {
+	if dbConn == nil {
+		CreateConnection()
+	}
+	return dbConn
 }
