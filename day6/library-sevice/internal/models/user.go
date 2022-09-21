@@ -1,6 +1,9 @@
 package models
 
 import (
+	"github.com/golang-jwt/jwt"
+	"golang.org/x/crypto/bcrypt"
+	"os"
 	"time"
 )
 
@@ -12,4 +15,31 @@ type User struct {
 	CreatedAt time.Time  `gorm:"autoCreateTime"`
 	UpdatedAt time.Time  `gorm:"autoUpdateTime"`
 	DeletedAt *time.Time `gorm:"autoDeleteTime"`
+}
+
+func (u *User) HashPassword() {
+	bytes, _ := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
+	u.Password = string(bytes)
+}
+
+func (u *User) CheckPasswordHash(password, hashed string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hashed), []byte(password))
+	return err == nil
+}
+
+// GenerateToken is a method for struct User for creating new jwt token
+func (u *User) GenerateToken() (string, error) {
+	var (
+		jwtKey = os.Getenv("JWT_SECRET_KEY")
+	)
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"id":    u.ID,
+		"email": u.Email,
+		"name":  u.Name,
+		"exp":   time.Now().Add(time.Hour * 72).Unix(), // we set expired in 72 hour
+	})
+
+	tokenString, err := token.SignedString([]byte(jwtKey))
+	return tokenString, err
 }

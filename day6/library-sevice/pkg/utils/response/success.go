@@ -22,7 +22,7 @@ func SuccessOkWithPagination(c echo.Context, code int, message string, data inte
 	return c.JSON(code, res)
 }
 
-func SuccesOkLogin(c echo.Context, code int, message string, data interface{}, token string) error {
+func SuccessLogin(c echo.Context, code int, message string, data interface{}, token string) error {
 	res := new(RespLogin)
 	res.Success = true
 	res.Message = message

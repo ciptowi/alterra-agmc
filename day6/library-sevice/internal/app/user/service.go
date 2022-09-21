@@ -28,15 +28,15 @@ func NewService(f *factory.Factory) *service {
 func (s *service) Create(ctx context.Context, payload dto.CreateUserRequest) (string, error) {
 	var data = make(map[string]interface{})
 
-	if payload.Name != nil {
-		data["name"] = payload.Name
-	}
-	if payload.Email != nil {
-		data["email"] = payload.Email
-	}
-	if payload.Password != nil {
-		data["password"] = payload.Password
-	}
+	//if payload.Name != nil {
+	data["name"] = payload.Name
+	//}
+	//if payload.Email != nil {
+	data["email"] = payload.Email
+	//}
+	//if payload.Password != nil {
+	data["password"] = payload.Password
+	//}
 	_, e := s.UserRepository.FindByEmail(ctx, payload.Email)
 	if e == nil {
 		return "Email already exists!", e

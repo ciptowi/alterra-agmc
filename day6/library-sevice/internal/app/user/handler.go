@@ -25,8 +25,8 @@ func (h *handler) Create(c echo.Context) error {
 		return response.ErrorResponse(c, http.StatusBadRequest, "Failed", err)
 	}
 	msg, err := h.service.Create(c.Request().Context(), *payload)
-	if err != nil {
-		return response.ErrorResponse(c, http.StatusInternalServerError, msg, err)
+	if msg == "Email already exists!" {
+		return response.ErrorResponse(c, http.StatusBadRequest, msg, err)
 	}
 	return response.SuccessOk(c, http.StatusCreated, msg, payload)
 }
