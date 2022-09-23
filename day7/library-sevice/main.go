@@ -52,5 +52,5 @@ to use this flag:
 	f := factory.NewFactory()
 	http.NewHttp(e, f)
 
-	e.Logger.Fatal(e.Start(":" + os.Getenv("APP_PORT")))
+	e.Logger.Fatal(e.Start(":" + os.Getenv("PORT")))
 }

@@ -1,5 +1,5 @@
 # step 1: build executable binary
-FROM golang:1.18-alpine AS builder
+FROM golang:1.18-alpine
 RUN apk update && apk add --no-cache git && apk add --no-cach bash && apk add build-base
 WORKDIR /app
 COPY go.mod ./

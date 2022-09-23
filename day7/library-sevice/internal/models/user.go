@@ -1,11 +1,14 @@
 package models
 
 import (
-	"github.com/golang-jwt/jwt"
-	"golang.org/x/crypto/bcrypt"
 	"os"
 	"time"
+
+	"github.com/golang-jwt/jwt"
+	"golang.org/x/crypto/bcrypt"
 )
+
+var JWT_KEY = os.Getenv("JWT_SECRET_KEY")
 
 type User struct {
 	ID        uint       `gorm:"primary_key;"`
@@ -29,9 +32,9 @@ func (u *User) CheckPasswordHash(password, hashed string) bool {
 
 // GenerateToken is a method for struct User for creating new jwt token
 func (u *User) GenerateToken() (string, error) {
-	var (
-		jwtKey = os.Getenv("JWT_SECRET_KEY")
-	)
+	// var (
+	// 	jwtKey = os.Getenv("JWT_SECRET_KEY")
+	// )
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":    u.ID,
@@ -40,6 +43,6 @@ func (u *User) GenerateToken() (string, error) {
 		"exp":   time.Now().Add(time.Hour * 72).Unix(), // we set expired in 72 hour
 	})
 
-	tokenString, err := token.SignedString([]byte(jwtKey))
+	tokenString, err := token.SignedString([]byte(JWT_KEY))
 	return tokenString, err
 }
